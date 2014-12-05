@@ -1,0 +1,30 @@
+#!/bin/sh
+
+SDKVERSION="8.1"
+SDKMINVERSION="7.0"
+ARCH="armv7"
+PLATFORM="iPhoneOS"
+
+DEVELOPER=`xcode-select -print-path`
+
+SDK="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer/SDKs/${PLATFORM}.sdk"
+
+BUILD_TOOL_PATH="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain"
+
+export PLATFORM_DIR="$DEVELOPER/Platforms/${PLATFORM}.platform"
+export TOOLCHAINS_BINDIR="${PLATFORM_DIR}/Developer/usr/bin"
+
+export CC="clang"
+#export CXX="clang++"
+#export CPP="clang++"
+export AR=${TOOLCHAINS_BINDIR}/ar
+export AS=${TOOLCHAINS_BINDIR}/as
+export LD=${TOOLCHAINS_BINDIR}/ld
+export RANLIB=${TOOLCHAINS_BINDIR}/ranlib
+
+export CFLAGS="-isysroot ${SDK} -arch ${ARCH}  ${CFLAGS}  -miphoneos-version-min=${SDKMINVERSION}"
+export CXXFLAGS="-isysroot ${SDK}  -arch ${ARCH} ${CXXFLAGS} -minphoneos-version-min=${SDKMINVERSION}"
+
+echo "./configure -host=arm-apple-darwin"
+
+
